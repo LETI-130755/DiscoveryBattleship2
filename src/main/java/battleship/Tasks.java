@@ -44,21 +44,25 @@ public class Tasks {
 		IGame game = null;
 		menuHelp();
 
+		MoveTimer moveTimer = new MoveTimer();
+		int moveNumberCount = 0;
+
 		System.out.print("> ");
 		Scanner in = new Scanner(System.in);
 		String command = in.next();
 		while (!command.equals(DESISTIR)) {
-
 			switch (command) {
 				case GERAFROTA:
 					myFleet = Fleet.createRandom();
 					game = new Game(myFleet);
 					game.printMyBoard(false, true);
+					moveTimer.start();
 					break;
 				case LEFROTA:
 					myFleet = buildFleet(in);
 					game = new Game(myFleet);
 					game.printMyBoard(false, true);
+					moveTimer.start();
 					break;
 				case STATUS:
 					if (myFleet != null)
@@ -70,9 +74,13 @@ public class Tasks {
 					break;
 				case RAJADA:
 					if (game != null) {
+						moveTimer.stopAndShow(moveNumberCount);
+
 						game.readEnemyFire(in);
 						myFleet.printStatus();
 						game.printMyBoard(true, false);
+
+						moveTimer.start();
 
 						if (game.getRemainingShips() == 0) {
 							game.over();
