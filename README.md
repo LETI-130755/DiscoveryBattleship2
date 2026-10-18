@@ -129,6 +129,47 @@ graph TD
 
 ---
 
+### Prompt final de estratégia para LLMs
+Considere agora a seguinte tática de geração de rajadas de tiros para a Batalha Naval dos Descobrimentos Portugueses.
+O tabuleiro possui linhas A a J e colunas 1 a 10. A minha frota tem 11 navios: 4 Barcas (1), 3 Caravelas (2), 2 Naus (3), 1 Fragata (4) e 1 Galeão (5 posições em T: corpo linear de 3 posições e 2 posições nas extremidades/asas).
+Nenhum navio toca noutro, nem na diagonal (espaçamento mínimo obrigatório de 1 casa).
+Eu sou o adversário e devolverei após cada jogada a estrutura JSON gerada pelo motor do jogo.
+
+REGRAS DE OURO DE MEMÓRIA E VALIDADE (Tolerância Zero a Repetições):
+1. Proibição Absoluta de Tiros Repetidos: Nunca dispare numa coordenada já disparada em qualquer jogada anterior nem em casas marcadas como água certa (-).
+2. Validação Obrigatória Antes de Submeter: Antes de gerar a nova rajada, confirme que nenhuma das 3 coordenadas consta na sua lista cumulativa de disparos já efetuados.
+3. Resposta Agregada: A resposta do jogo é conjunta para os 3 tiros. Se obtiver "hitsOnBoats", não invente qual deles acertou; triangule nas jogadas seguintes testando as células adjacentes (N, S, E, O).
+
+FORMATO OBRIGATÓRIO DE CADA RESPOSTA (estritamente estas 5 secções):
+1. Diário de Bordo: Rajada anterior, deduções lógicas, acertos confirmados ou descartados.
+2. Histórico Cumulativo de Tiros: Lista exaustiva em texto de TODAS as coordenadas já alvejadas até à jogada atual (ex.: A2, B2, B4, C3, D5, E7, H4...).
+3. Frota Restante: Contagem das embarcações ainda a flutuar.
+4. Mapa 10x10 Atualizado:
+   Símbolos:
+   ·= Desconhecido
+   o= Água confirmada
+   ?= Tiro disparado (a aguardar resolução de ambiguidade)
+   X= Acerto confirmado em navio a flutuar
+   #= Navio afundado
+   - = Água certa (halo de 1 casa em redor de navio afundado ou diagonais proibidas)
+5. Nova Rajada (3 tiros válidos):
+   - Formato JSON (Array simples conforme guião):
+[
+  {"row": "...", "column": ...},
+  {"row": "...", "column": ...},
+  {"row": "...", "column": ...}
+]
+   - Coordenadas para consola: <coord1> <coord2> <coord3> (ex.: B2 E5 H8)
+
+TÁTICA:
+- Modo Caça: Enquanto não houver suspeitas ativas, explore o padrão de xadrez (onde a soma da linha [A=1..J=10] + coluna é par), espaçando os 3 tiros por diferentes quadrantes do mapa.
+- Modo Ataque: Perante acertos, investigue as posições ortogonais livres (N, S, E, O). As Caravelas, Naus e Fragatas são linhas retas; assim que descobrir 2 acertos alinhados, explore as pontas. Para navios em linha, as diagonais aos acertos são água certa (-).
+- O Galeão: Tem formato em T. Se encontrar acertos contíguos não alinhados, suspeite da junção do Galeão e explore a terceira direção ortogonal.
+- Halo de Afundamento: Assim que o relatório indicar "sunkBoats", determine as coordenadas da carcaça (#) e preencha imediatamente todo o perímetro de 1 casa em seu redor (inclusive diagonais) com água certa (-).
+- Fim de Jogo: Quando todos os 11 navios forem afundados, encerre com uma declaração de vitória.
+
+Quando eu escrever "Começa", inicie a Rajada 1.
+
 ## 🧪 Testing
 We use high-coverage unit testing to ensure game stability. Run tests using:
 ```bash
