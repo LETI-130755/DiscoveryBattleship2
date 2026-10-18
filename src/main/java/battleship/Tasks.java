@@ -1,5 +1,6 @@
 package battleship;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +33,7 @@ public class Tasks {
 	private static final String MAPA = "mapa";
 	private static final String STATUS = "estado";
 	private static final String SIMULA = "simula";
+	private static final String PDF = "pdf";
 
 	/**
 	 * This task also tests the fighting element of a round of three shots
@@ -42,21 +44,25 @@ public class Tasks {
 		IGame game = null;
 		menuHelp();
 
+		MoveTimer moveTimer = new MoveTimer();
+		int moveNumberCount = 0;
+
 		System.out.print("> ");
 		Scanner in = new Scanner(System.in);
 		String command = in.next();
 		while (!command.equals(DESISTIR)) {
-
 			switch (command) {
 				case GERAFROTA:
 					myFleet = Fleet.createRandom();
 					game = new Game(myFleet);
 					game.printMyBoard(false, true);
+					moveTimer.start();
 					break;
 				case LEFROTA:
 					myFleet = buildFleet(in);
 					game = new Game(myFleet);
 					game.printMyBoard(false, true);
+					moveTimer.start();
 					break;
 				case STATUS:
 					if (myFleet != null)
@@ -68,9 +74,13 @@ public class Tasks {
 					break;
 				case RAJADA:
 					if (game != null) {
+						moveTimer.stopAndShow(moveNumberCount);
+
 						game.readEnemyFire(in);
 						myFleet.printStatus();
 						game.printMyBoard(true, false);
+
+						moveTimer.start();
 
 						if (game.getRemainingShips() == 0) {
 							game.over();
@@ -101,9 +111,19 @@ public class Tasks {
 					if (game != null)
 						game.printMyBoard(true, true);
 					break;
-                case AJUDA:
-                    menuHelp();
-                    break;
+				case PDF:
+					if (game != null) {
+						try {
+							PdfExporter.export(game, "data/jogadas.pdf");
+							System.out.println("PDF criado em data/jogadas.pdf");
+						} catch (IOException e) {
+							LOGGER.error("Falha ao criar o PDF", e);
+						}
+					}
+					break;
+				case AJUDA:
+					menuHelp();
+					break;
 				default:
 					System.out.println("Que comando é esse??? Repete ...");
 			}
@@ -126,6 +146,7 @@ public class Tasks {
 		System.out.println("- " + RAJADA + ": Realiza uma rajada de disparos.");
 		System.out.println("- " + SIMULA + ": Simula um jogo completo.");
 		System.out.println("- " + TIROS + ": Lista os tiros válidos realizados (* = tiro em navio, o = tiro na água)");
+		System.out.println("- " + PDF + ": Exporta o registo das jogadas para PDF.");
 		System.out.println("- " + DESISTIR + ": Encerra o jogo.");
 		System.out.println("===============================================================");
 	}
