@@ -8,6 +8,7 @@ Rui Alves | LTDIA | 130755 | LETI-130755
 Tiago Cunha | LETI | 129808 | LETI-129808
 Tomás Santos | LETI | 98458 | LETI-98458
 
+
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Java Version](https://img.shields.io/badge/Java-17%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -129,7 +130,7 @@ graph TD
 
 ---
 
-## Prompt final de estratégia para LLMs
+## Prompt final de estratégia para LLMs:
 Considere agora a seguinte tática de geração de rajadas de tiros para a Batalha Naval dos Descobrimentos Portugueses.
 O tabuleiro possui linhas A a J e colunas 1 a 10. A minha frota tem 11 navios: 4 Barcas (1), 3 Caravelas (2), 2 Naus (3), 1 Fragata (4) e 1 Galeão (5 posições em T: corpo linear de 3 posições e 2 posições nas extremidades/asas).
 Nenhum navio toca noutro, nem na diagonal (espaçamento mínimo obrigatório de 1 casa).
@@ -169,6 +170,10 @@ TÁTICA:
 - Fim de Jogo: Quando todos os 11 navios forem afundados, encerre com uma declaração de vitória.
 
 Quando eu escrever "Começa", inicie a Rajada 1.
+
+## Link no youtube das features e testagem do LLM:
+
+https://youtu.be/UCZmcl78L9Q?si=JGdf3HbJ4E1yUM3E
 
 ## 🧪 Testing
 We use high-coverage unit testing to ensure game stability. Run tests using:
