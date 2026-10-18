@@ -145,6 +145,7 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>3.0.4</version>
+		</dependency>
 		<!-- Visualização gráfica com cores ANSI no terminal -->
 		<dependency>
 			<groupId>org.fusesource.jansi</groupId>
