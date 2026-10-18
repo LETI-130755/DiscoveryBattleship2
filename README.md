@@ -1,5 +1,13 @@
 # ⚓ Battleship 2.0
 
+### Grupo: TP01_LETI-3
+
+Nome | Licenciatura | N.º de aluno | Conta Github
+--- | --- | --- | ---
+Rui Alves | LTDIA | 130755 | LETI-130755
+Tiago Cunha | LETI | 129808 | LETI-129808
+Tomás Santos | LETI | 98458 | LETI-98458
+
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Java Version](https://img.shields.io/badge/Java-17%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
