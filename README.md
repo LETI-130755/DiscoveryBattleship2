@@ -129,7 +129,7 @@ graph TD
 
 ---
 
-### Prompt final de estratégia para LLMs
+## Prompt final de estratégia para LLMs
 Considere agora a seguinte tática de geração de rajadas de tiros para a Batalha Naval dos Descobrimentos Portugueses.
 O tabuleiro possui linhas A a J e colunas 1 a 10. A minha frota tem 11 navios: 4 Barcas (1), 3 Caravelas (2), 2 Naus (3), 1 Fragata (4) e 1 Galeão (5 posições em T: corpo linear de 3 posições e 2 posições nas extremidades/asas).
 Nenhum navio toca noutro, nem na diagonal (espaçamento mínimo obrigatório de 1 casa).
