@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.util.*;
 
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
+
 public class Game implements IGame
 {
 	/**
@@ -42,8 +45,11 @@ public class Game implements IGame
 
 		if (showLegend) {
 			System.out.println("          LEGENDA");
-			System.out.println("'" + SHIP_MARKER + "'->navio, '" + SHIP_ADJACENT_MARKER + "'->adjacente a navio, '" + EMPTY_MARKER + "'->água");
-			System.out.println("'" + SHOT_SHIP_MARKER + "'->Tiro certeiro, '" + SHOT_WATER_MARKER + "'->Tiro na água");
+			System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
+					+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
+					+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
+			System.out.println("'" + ansi().fg(RED).bold().a(SHOT_SHIP_MARKER).reset() + "'->Tiro certeiro, '"
+					+ ansi().fg(BLUE).bold().a(SHOT_WATER_MARKER).reset() + "'->Tiro na água");
 		}
 		System.out.println();
 	}
@@ -72,6 +78,22 @@ public class Game implements IGame
 			}
 	}
 
+	private static String formatCellWithColor(char cell) {
+		switch (cell) {
+			case EMPTY_MARKER: // '.' água
+				return ansi().fg(CYAN).a(".").reset().toString();
+			case SHIP_MARKER: // '#' navio
+				return ansi().fg(YELLOW).bold().a("#").reset().toString();
+			case SHOT_SHIP_MARKER: // '*' tiro certeiro
+				return ansi().fg(RED).bold().a("*").reset().toString();
+			case SHOT_WATER_MARKER: // 'o' tiro na água
+				return ansi().fg(BLUE).bold().a("o").reset().toString();
+			case SHIP_ADJACENT_MARKER: // '-' adjacente
+				return ansi().fg(MAGENTA).a("-").reset().toString();
+			default:
+				return String.valueOf(cell);
+		}
+	}
 	private static void printBoardFrame(char[][] map) {
 		System.out.println();
 		System.out.print("    ");
@@ -90,8 +112,9 @@ public class Game implements IGame
 			Position pos = new Position(row, 0);
 			char rowLabel = pos.getClassicRow();
 			System.out.print(" " + rowLabel + " |");
-			for (int col = 0; col < BOARD_SIZE; col++)
-				System.out.print(" " + map[row][col]);
+			for (int col = 0; col < BOARD_SIZE; col++) {
+				System.out.print(" " + formatCellWithColor(map[row][col]));
+			}
 			System.out.println(" |");
 		}
 
