@@ -11,6 +11,9 @@ import static org.fusesource.jansi.Ansi.Color.*;
 
 public class Game implements IGame
 {
+
+	public static final String LEGENDA_HEADER = "          LEGENDA";
+
 	/**
 	 * Prints the game board by representing the positions of ships, adjacent tiles,
 	 * shots, and other game elements onto the console. The method also optionally
@@ -44,14 +47,18 @@ public class Game implements IGame
 		printBoardFrame(map);
 
 		if (showLegend) {
-			System.out.println("          LEGENDA");
-			System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
-					+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
-					+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
-			System.out.println("'" + ansi().fg(RED).bold().a(SHOT_SHIP_MARKER).reset() + "'->Tiro certeiro, '"
-					+ ansi().fg(BLUE).bold().a(SHOT_WATER_MARKER).reset() + "'->Tiro na água");
+			printLegend(LEGENDA_HEADER);
 		}
 		System.out.println();
+	}
+
+	private static void printLegend(String legendaHeader) {
+		System.out.println(legendaHeader);
+		System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
+				+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
+				+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
+		System.out.println("'" + ansi().fg(RED).bold().a(SHOT_SHIP_MARKER).reset() + "'->Tiro certeiro, '"
+				+ ansi().fg(BLUE).bold().a(SHOT_WATER_MARKER).reset() + "'->Tiro na água");
 	}
 
 	private static void printShips(IFleet fleet, char[][] map) {
@@ -252,8 +259,8 @@ public class Game implements IGame
 			for (int c = 0; c < BOARD_SIZE; c++)
 				usablePositions.add(new Position(r, c));
 
-		this.myFleet.getSunkShips().forEach(ship -> usablePositions.removeAll(ship.getAdjacentPositions()));
-		this.alienMoves.forEach(move ->  usablePositions.removeAll(move.getShots()));
+		this.myFleet.getSunkShips().forEach(ship -> ship.getAdjacentPositions().forEach(usablePositions::remove));
+		this.alienMoves.forEach(move -> move.getShots().forEach(usablePositions::remove));
 
 		List<IPosition> candidateShots = new ArrayList<>(usablePositions);
 
@@ -404,17 +411,17 @@ public class Game implements IGame
 			return new ShotResult(true, true, null, false);
 		}
 
-		IShip ship = myFleet.shipAt(pos);
-		if (ship == null)
+        if (myFleet.shipAt(pos) == null)
 			return new ShotResult(true, false, null, false);
 		else
 		{
-			ship.shoot(pos);
+			myFleet.shipAt(pos).shoot(pos);
 			countHits++;
-			if (!ship.stillFloating()) {
+			boolean shipSunk = !myFleet.shipAt(pos).stillFloating();
+			if (shipSunk) {
 				countSinks++;
 			}
-			return new ShotResult(true, false, ship, !ship.stillFloating());
+			return new ShotResult(true, false, myFleet.shipAt(pos), shipSunk);
 		}
 	}
 
