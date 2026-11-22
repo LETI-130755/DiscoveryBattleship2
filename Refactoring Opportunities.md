@@ -8,7 +8,6 @@
 | `Game::printLegend` | Fixed legend header dependency / Hardcoded argument | Introduce Parameter | 129808 |
 | `Fleet::createRandom` | Long Method | Extract Method | 98458 |
 | `Ship::getAdjacentPositions` | Expressions & Conditionals | Introduce Variable | 98458 |
-| `Fleet::addShip` | Data Flow & Redundancy | Inline | 98458 |
-| `Fleet::printStatus` | Data Flow & Redundancy | Safe Delete | 98458 |
-| `Ship::isInsideBoard` | Data Flow & Redundancy | Introduce Constant | 98458 |
-| `Fleet::shipAt` | Expressions & Conditionals | Introduce Parameter | 98458 |
+| `Fleet::printShips` | Feature Envy (MethodMayBeStatic) | Make Static | 98458 |
+| `GameController::receiveShots` | Magic Number (`10` na validação da coluna) | Introduce Constant | 98458 |
+| `Fleet::addShip` (parâmetro `s`) | Mysterious Name (nome de uma só letra) | Rename | 98458 |

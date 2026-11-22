@@ -436,7 +436,7 @@ class FleetTest {
 	@Test
 	@DisplayName("printShips1: lista vazia não imprime nada")
 	void printShips1() {
-		fleet.printShips(new ArrayList<>());
+		Fleet.printShips(new ArrayList<>());
 		assertEquals("", output(), "Error: expected no output for an empty list but got '" + output() + "'");
 	}
 
@@ -445,7 +445,7 @@ class FleetTest {
 	void printShips2() {
 		IShip b = barge(1, 1);
 		IShip c = caravel(5, 5);
-		fleet.printShips(List.of(b, c));
+		Fleet.printShips(List.of(b, c));
 		String expected = b + System.lineSeparator() + c + System.lineSeparator();
 		assertEquals(expected, output(), "Error: expected '" + expected + "' but got '" + output() + "'");
 	}
@@ -453,7 +453,7 @@ class FleetTest {
 	@Test
 	@DisplayName("printShips3: lista nula provoca AssertionError")
 	void printShips3() {
-		assertThrows(AssertionError.class, () -> fleet.printShips(null),
+		assertThrows(AssertionError.class, () -> Fleet.printShips(null),
 				"Error: expected AssertionError for a null list");
 	}
 
