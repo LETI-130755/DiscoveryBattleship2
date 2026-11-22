@@ -44,14 +44,18 @@ public class Game implements IGame
 		printBoardFrame(map);
 
 		if (showLegend) {
-			System.out.println("          LEGENDA");
-			System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
-					+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
-					+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
-			System.out.println("'" + ansi().fg(RED).bold().a(SHOT_SHIP_MARKER).reset() + "'->Tiro certeiro, '"
-					+ ansi().fg(BLUE).bold().a(SHOT_WATER_MARKER).reset() + "'->Tiro na água");
+			printLegend();
 		}
 		System.out.println();
+	}
+
+	private static void printLegend() {
+		System.out.println("          LEGENDA");
+		System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
+				+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
+				+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
+		System.out.println("'" + ansi().fg(RED).bold().a(SHOT_SHIP_MARKER).reset() + "'->Tiro certeiro, '"
+				+ ansi().fg(BLUE).bold().a(SHOT_WATER_MARKER).reset() + "'->Tiro na água");
 	}
 
 	private static void printShips(IFleet fleet, char[][] map) {
