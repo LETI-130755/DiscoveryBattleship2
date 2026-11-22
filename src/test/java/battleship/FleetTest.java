@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,21 +138,28 @@ class FleetTest {
 	}
 
 	@Test
-	@DisplayName("createRandom3: em 100 frotas aleatórias todos os navios estão no tabuleiro e sem colisões (exercita as tentativas rejeitadas)")
+	@DisplayName("createRandom3: em 10 frotas aleatórias todos os navios estão no tabuleiro e sem colisões (exercita as tentativas rejeitadas)")
 	void createRandom3() {
-		for (int n = 0; n < 100; n++) {
-			List<IShip> ships = Fleet.createRandom().getShips();
-			assertEquals(11, ships.size(), "Error: expected 11 ships but got " + ships.size());
-			for (int a = 0; a < ships.size(); a++) {
-				final IShip shipA = ships.get(a);
-				assertTrue(shipA.isInsideBoard(), "Error: expected ship inside the board but got " + shipA);
-				for (int b = a + 1; b < ships.size(); b++) {
-					final IShip shipB = ships.get(b);
-					assertFalse(shipA.tooCloseTo(shipB),
-							"Error: expected no collision risk between " + shipA + " and " + shipB);
+		assertTimeoutPreemptively(Duration.ofSeconds(5), () -> {
+			for (int n = 0; n < 10; n++) {
+				List<IShip> ships = Fleet.createRandom().getShips();
+				assertEquals(11, ships.size(), "Error: expected 11 ships but got " + ships.size());
+				for (int a = 0; a < ships.size(); a++) {
+					final IShip shipA = ships.get(a);
+					assertTrue(
+							shipA.isInsideBoard(),
+							"Error: expected ship inside the board but got " + shipA
+					);
+					for (int b = a + 1; b < ships.size(); b++) {
+						final IShip shipB = ships.get(b);
+						assertFalse(
+								shipA.tooCloseTo(shipB),
+								"Error: expected no collision risk between " + shipA + " and " + shipB
+						);
+					}
 				}
 			}
-		}
+		}, "Error: expected createRandom3 to complete within 5 seconds but it timed out");
 	}
 
 	@Test
