@@ -47,13 +47,13 @@ public class Game implements IGame
 		printBoardFrame(map);
 
 		if (showLegend) {
-			printLegend();
+			printLegend(LEGENDA_HEADER);
 		}
 		System.out.println();
 	}
 
-	private static void printLegend() {
-		System.out.println(LEGENDA_HEADER);
+	private static void printLegend(String legendaHeader) {
+		System.out.println(legendaHeader);
 		System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
 				+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
 				+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
