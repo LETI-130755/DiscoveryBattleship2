@@ -209,7 +209,7 @@ public class GameTest {
 			g.printMyBoard(true, true);
 		});
 
-		// Preencher quase todo o tabuleiro (98 posições) para forçar o ramo else em randomEnemyFire
+		// Preencher quase to do o tabuleiro (98 posições) para forçar o ramo else em randomEnemyFire
 		List<IPosition> batch = new java.util.ArrayList<>();
 		for (int r = 0; r < Game.BOARD_SIZE; r++) {
 			for (int c = 0; c < Game.BOARD_SIZE; c++) {
