@@ -11,6 +11,9 @@ import static org.fusesource.jansi.Ansi.Color.*;
 
 public class Game implements IGame
 {
+
+	public static final String LEGENDA_HEADER = "          LEGENDA";
+
 	/**
 	 * Prints the game board by representing the positions of ships, adjacent tiles,
 	 * shots, and other game elements onto the console. The method also optionally
@@ -50,7 +53,7 @@ public class Game implements IGame
 	}
 
 	private static void printLegend() {
-		System.out.println("          LEGENDA");
+		System.out.println(LEGENDA_HEADER);
 		System.out.println("'" + ansi().fg(YELLOW).bold().a(SHIP_MARKER).reset() + "'->navio, '"
 				+ ansi().fg(MAGENTA).a(SHIP_ADJACENT_MARKER).reset() + "'->adjacente a navio, '"
 				+ ansi().fg(CYAN).a(EMPTY_MARKER).reset() + "'->água");
