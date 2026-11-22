@@ -184,6 +184,16 @@ mvn test
 > [!TIP]
 > Use the `-Dtest=ClassName` flag to run specific test suites during development.
 
+### ⚙️ Integração contínua (GitHub Actions)
+
+O projeto usa um workflow do GitHub Actions (`.github/workflows/unit-tests.yml`).
+Em cada **push**, o workflow:
+1. faz checkout do código;
+2. configura o JDK 17;
+3. executa a bateria de testes unitários com `mvn test`.
+
+O resultado pode ser consultado no separador **Actions** do repositório.
+
 ---
 
 ## 🤝 Contributing
