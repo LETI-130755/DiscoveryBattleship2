@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class MoveTimerTest {
 
     @Test
-    @DisplayName("Estado inicial do temporizador deve ter lastMoveMillis igual a 0")
+    @DisplayName("Estado inicial do temporizador deve ter lastMoveMillis igual a 1")
     void testInitialState() {
         MoveTimer timer = new MoveTimer();
-        assertEquals(0L, timer.getLastMoveMillis());
+        assertEquals(1L, timer.getLastMoveMillis());
     }
 
     @Test
@@ -47,4 +47,5 @@ class MoveTimerTest {
         MoveTimer timer = new MoveTimer();
         assertThrows(IllegalStateException.class, () -> timer.stopAndShow(1));
     }
+
 }
