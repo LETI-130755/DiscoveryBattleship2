@@ -252,8 +252,8 @@ public class Game implements IGame
 			for (int c = 0; c < BOARD_SIZE; c++)
 				usablePositions.add(new Position(r, c));
 
-		this.myFleet.getSunkShips().forEach(ship -> usablePositions.removeAll(ship.getAdjacentPositions()));
-		this.alienMoves.forEach(move ->  usablePositions.removeAll(move.getShots()));
+		this.myFleet.getSunkShips().forEach(ship -> ship.getAdjacentPositions().forEach(usablePositions::remove));
+		this.alienMoves.forEach(move -> move.getShots().forEach(usablePositions::remove));
 
 		List<IPosition> candidateShots = new ArrayList<>(usablePositions);
 
@@ -411,10 +411,11 @@ public class Game implements IGame
 		{
 			ship.shoot(pos);
 			countHits++;
-			if (!ship.stillFloating()) {
+			boolean b = !ship.stillFloating();
+			if (b) {
 				countSinks++;
 			}
-			return new ShotResult(true, false, ship, !ship.stillFloating());
+			return new ShotResult(true, false, ship, b);
 		}
 	}
 
