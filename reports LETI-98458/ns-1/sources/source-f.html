@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PdfExporter</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">battleship</a>
+</div>
+
+<h1>Coverage Summary for Class: PdfExporter (battleship)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PdfExporter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/39)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package battleship;
+&nbsp;
+&nbsp;import org.apache.pdfbox.pdmodel.PDDocument;
+&nbsp;import org.apache.pdfbox.pdmodel.PDPage;
+&nbsp;import org.apache.pdfbox.pdmodel.PDPageContentStream;
+&nbsp;import org.apache.pdfbox.pdmodel.font.PDType1Font;
+&nbsp;import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+<b class="nc">&nbsp;public class PdfExporter {</b>
+&nbsp;
+&nbsp;    private static final float MARGIN = 50;
+&nbsp;    private static final float LINE_HEIGHT = 16;
+&nbsp;
+&nbsp;    public static void export(IGame game, String file) throws IOException {
+<b class="nc">&nbsp;        List&lt;String&gt; lines = buildLines(game);</b>
+&nbsp;
+<b class="nc">&nbsp;        try (PDDocument doc = new PDDocument()) {</b>
+<b class="nc">&nbsp;            PDType1Font font = new PDType1Font(Standard14Fonts.FontName.HELVETICA);</b>
+<b class="nc">&nbsp;            PDPage page = new PDPage();</b>
+<b class="nc">&nbsp;            doc.addPage(page);</b>
+<b class="nc">&nbsp;            PDPageContentStream cs = new PDPageContentStream(doc, page);</b>
+<b class="nc">&nbsp;            float y = page.getMediaBox().getHeight() - MARGIN;</b>
+&nbsp;
+<b class="nc">&nbsp;            for (String line : lines) {</b>
+<b class="nc">&nbsp;                if (y &lt; MARGIN) {                       // nova página quando acaba o espaço</b>
+&nbsp;                    cs.close();
+<b class="nc">&nbsp;                    page = new PDPage();</b>
+<b class="nc">&nbsp;                    doc.addPage(page);</b>
+<b class="nc">&nbsp;                    cs = new PDPageContentStream(doc, page);</b>
+<b class="nc">&nbsp;                    y = page.getMediaBox().getHeight() - MARGIN;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                cs.beginText();</b>
+<b class="nc">&nbsp;                cs.setFont(font, 12);</b>
+<b class="nc">&nbsp;                cs.newLineAtOffset(MARGIN, y);</b>
+<b class="nc">&nbsp;                cs.showText(line);</b>
+<b class="nc">&nbsp;                cs.endText();</b>
+<b class="nc">&nbsp;                y -= LINE_HEIGHT;</b>
+&nbsp;            }
+&nbsp;            cs.close();
+<b class="nc">&nbsp;            doc.save(file);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static List&lt;String&gt; buildLines(IGame game) {
+<b class="nc">&nbsp;        List&lt;String&gt; lines = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        lines.add(&quot;Battleship - Registo de jogadas&quot;);</b>
+<b class="nc">&nbsp;        lines.add(&quot;&quot;);</b>
+<b class="nc">&nbsp;        for (IMove move : game.getAlienMoves()) {</b>
+<b class="nc">&nbsp;            StringBuilder shots = new StringBuilder(&quot;Rajada &quot; + move.getNumber() + &quot;: &quot;);</b>
+<b class="nc">&nbsp;            for (IPosition p : move.getShots()) {</b>
+<b class="nc">&nbsp;                shots.append(p).append(&quot;  &quot;);            // toString() devolve ex.: B3</b>
+&nbsp;            }
+<b class="nc">&nbsp;            lines.add(shots.toString());</b>
+<b class="nc">&nbsp;            for (IGame.ShotResult r : move.getShotResults()) {</b>
+<b class="nc">&nbsp;                if (r.repeated())          lines.add(&quot;    tiro repetido&quot;);</b>
+<b class="nc">&nbsp;                else if (!r.valid())       lines.add(&quot;    tiro fora do tabuleiro&quot;);</b>
+<b class="nc">&nbsp;                else if (r.ship() == null) lines.add(&quot;    Agua&quot;);</b>
+<b class="nc">&nbsp;                else lines.add(&quot;    &quot; + r.ship().getCategory() + (r.sunk() ? &quot; afundado&quot; : &quot; atingido&quot;));</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        lines.add(&quot;&quot;);</b>
+<b class="nc">&nbsp;        lines.add(&quot;Acertos: &quot; + game.getHits() + &quot;   Afundados: &quot; + game.getSunkShips()</b>
+<b class="nc">&nbsp;                + &quot;   Repetidos: &quot; + game.getRepeatedShots() + &quot;   Fora: &quot; + game.getInvalidShots());</b>
+<b class="nc">&nbsp;        lines.add(&quot;Navios restantes: &quot; + game.getRemainingShips());</b>
+<b class="nc">&nbsp;        return lines;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-22 16:57</div>
+</div>
+</body>
+</html>

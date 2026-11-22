@@ -45,7 +45,7 @@ public class Tasks {
 		menuHelp();
 
 		MoveTimer moveTimer = new MoveTimer();
-		int moveNumberCount = 0;
+		int moveNumberCount = 1;
 
 		System.out.print("> ");
 		Scanner in = new Scanner(System.in);
@@ -74,7 +74,9 @@ public class Tasks {
 					break;
 				case RAJADA:
 					if (game != null) {
+
 						moveTimer.stopAndShow(moveNumberCount);
+						moveNumberCount++;
 
 						game.readEnemyFire(in);
 						myFleet.printStatus();
